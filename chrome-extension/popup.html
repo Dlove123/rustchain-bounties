@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { width: 300px; padding: 20px; font-family: Arial, sans-serif; }
+    .balance { font-size: 24px; font-weight: bold; color: #2ecc71; }
+    .usd { font-size: 14px; color: #666; }
+    input { width: 100%; padding: 8px; margin: 10px 0; }
+    button { width: 100%; padding: 10px; background: #3498db; color: white; border: none; cursor: pointer; }
+    .refresh { margin-top: 10px; font-size: 12px; color: #999; }
+  </style>
+</head>
+<body>
+  <h2>💰 RustChain Balance</h2>
+  <input type="text" id="walletId" placeholder="Enter wallet ID">
+  <div class="balance" id="balance">-- RTC</div>
+  <div class="usd" id="usd">≈ $-- USD</div>
+  <button id="saveBtn">Save & Load</button>
+  <div class="refresh">Auto-refresh: 30s</div>
+  <script src="popup.js"></script>
+</body>
+</html>
