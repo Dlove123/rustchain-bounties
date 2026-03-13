@@ -1,0 +1,94 @@
+{
+  "info": {
+    "name": "RustChain API",
+    "description": "Complete API collection for RustChain blockchain",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://50.28.86.131",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Epoch",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/epoch",
+          "host": ["{{base_url}}"],
+          "path": ["epoch"]
+        }
+      }
+    },
+    {
+      "name": "Miners",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/miners",
+          "host": ["{{base_url}}"],
+          "path": ["api", "miners"]
+        }
+      }
+    },
+    {
+      "name": "Wallet Balance",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/wallet/balance?miner_id=YOUR_MINER_ID",
+          "host": ["{{base_url}}"],
+          "path": ["wallet", "balance"],
+          "query": [
+            {
+              "key": "miner_id",
+              "value": "YOUR_MINER_ID"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Attestation Challenge",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "url": {
+          "raw": "{{base_url}}/attest/challenge",
+          "host": ["{{base_url}}"],
+          "path": ["attest", "challenge"]
+        }
+      }
+    },
+    {
+      "name": "Attestation Submit",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "application/json"}],
+        "url": {
+          "raw": "{{base_url}}/attest/submit",
+          "host": ["{{base_url}}"],
+          "path": ["attest", "submit"]
+        }
+      }
+    }
+  ]
+}
