@@ -1,0 +1,1 @@
+# Mobile Wallet App (React Native/Flutter)\n\n## Bounty: 20 RTC\n\n## Features\n- RTC balance display\n- Send/Receive RTC\n- Transaction history\n- QR code scanner\n\n## TODO\n- [ ] Choose framework (React Native vs Flutter)\n- [ ] Setup project\n- [ ] Implement UI\n- [ ] Integrate RustChain API\n- [ ] Test\n- [ ] Deploy\n\n**Status**: Starting now! 🚀

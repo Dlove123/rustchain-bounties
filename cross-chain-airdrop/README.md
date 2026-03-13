@@ -1,0 +1,1 @@
+# Cross-Chain Airdrop Implementation\n\n## Target\n- Solana + Base chains\n- wRTC token bridge\n- Merkle tree distribution\n\n## TODO\n- [ ] Analyze requirements\n- [ ] Design architecture\n- [ ] Implement Solana side\n- [ ] Implement Base side\n- [ ] Testing\n- [ ] Documentation\n\n**Status**: Starting now! 🚀
