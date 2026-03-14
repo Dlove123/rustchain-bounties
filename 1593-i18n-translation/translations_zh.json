@@ -1,0 +1,32 @@
+{
+  "errors": {
+    "insufficient_balance": "余额不足",
+    "invalid_address": "无效地址",
+    "transaction_failed": "交易失败",
+    "network_error": "网络错误",
+    "node_unavailable": "节点不可用",
+    "sync_in_progress": "同步进行中",
+    "invalid_amount": "无效金额",
+    "duplicate_transaction": "重复交易",
+    "gas_too_low": "Gas 太低",
+    "nonce_too_low": "Nonce 太低",
+    "timeout": "请求超时",
+    "rate_limit": "请求频率过高",
+    "unauthorized": "未授权访问",
+    "not_found": "资源不存在",
+    "internal_error": "内部错误"
+  },
+  "success": {
+    "transaction_sent": "交易已发送",
+    "balance_updated": "余额已更新",
+    "sync_complete": "同步完成"
+  },
+  "labels": {
+    "balance": "余额",
+    "address": "地址",
+    "transaction": "交易",
+    "block": "区块",
+    "gas": "Gas",
+    "fee": "手续费"
+  }
+}
