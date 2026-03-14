@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { width: 350px; padding: 20px; font-family: Arial; background: #1a1a2e; color: #fff; }
+    h2 { color: #00d9ff; text-align: center; }
+    .tab { display: flex; justify-content: space-around; margin-bottom: 20px; }
+    .tab button { background: #16213e; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+    .tab button.active { background: #00d9ff; color: #1a1a2e; }
+    .content { display: none; }
+    .content.active { display: block; }
+    input, textarea { width: 100%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; background: #16213e; color: #fff; }
+    button.action { width: 100%; padding: 12px; background: #00d9ff; color: #1a1a2e; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+    button.action:hover { background: #00b8d4; }
+    .video-item { padding: 10px; background: #16213e; border-radius: 5px; margin-bottom: 10px; }
+    .video-title { font-weight: bold; color: #00d9ff; }
+    .video-votes { color: #888; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <h2>🎬 BoTTube</h2>
+  
+  <div class="tab">
+    <button class="tab-btn active" data-tab="browse">Browse</button>
+    <button class="tab-btn" data-tab="upload">Upload</button>
+    <button class="tab-btn" data-tab="profile">Profile</button>
+  </div>
+  
+  <div id="browse" class="content active">
+    <input type="text" id="searchInput" placeholder="Search videos...">
+    <button class="action" onclick="searchVideos()">Search</button>
+    <div id="videoList"></div>
+  </div>
+  
+  <div id="upload" class="content">
+    <input type="text" id="videoTitle" placeholder="Video title">
+    <textarea id="videoDesc" rows="3" placeholder="Description"></textarea>
+    <input type="text" id="videoUrl" placeholder="Video URL">
+    <button class="action" onclick="uploadVideo()">Upload</button>
+  </div>
+  
+  <div id="profile" class="content">
+    <div id="userInfo">Loading...</div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
