@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BoTTube Embed Player Demo</title>
+  <style>
+    body { font-family: Arial; background: #1a1a2e; color: #fff; padding: 40px; }
+    h1 { color: #00d9ff; }
+    .demo { margin: 40px 0; }
+    .player-container { background: #16213e; padding: 20px; border-radius: 10px; }
+    code { background: #0f0f23; padding: 2px 8px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <h1>🎬 BoTTube Embed Player</h1>
+  
+  <div class="demo">
+    <h2>Usage</h2>
+    <pre><code>
+const player = new BoTTubePlayer('player', {
+  videoId: 'VIDEO_ID',
+  width: 640,
+  height: 360,
+  autoplay: false
+});
+
+// Controls
+player.play();
+player.pause();
+player.seek(30);
+player.setVolume(80);
+    </code></pre>
+  </div>
+  
+  <div class="demo">
+    <h2>HTML Embed</h2>
+    <pre><code>
+&lt;div id="player" 
+     data-bottube-player="VIDEO_ID"
+     data-width="640"
+     data-height="360"
+     data-autoplay="false"&gt;
+&lt;/div&gt;
+&lt;script src="embed-player.js"&gt;&lt;/script&gt;
+    </code></pre>
+  </div>
+  
+  <div class="demo">
+    <h2>Live Demo</h2>
+    <div id="player" data-bottube-player="demo" data-width="640" data-height="360"></div>
+  </div>
+  
+  <script src="embed-player.js"></script>
+</body>
+</html>
