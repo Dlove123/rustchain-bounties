@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miner Dashboard - RustChain</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .dashboard { max-width: 1200px; margin: 0 auto; }
+        .card { background: white; border-radius: 8px; padding: 20px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .stat-card { text-align: center; padding: 20px; }
+        .stat-value { font-size: 32px; font-weight: bold; color: #2563eb; }
+        .stat-label { color: #666; margin-top: 8px; }
+        h1 { color: #1e40af; }
+        h2 { color: #1e40af; border-bottom: 2px solid #2563eb; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #2563eb; color: white; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>⛏️ Miner Dashboard</h1>
+        
+        <div class="stats">
+            <div class="card stat-card">
+                <div class="stat-value" id="balance">-- RTC</div>
+                <div class="stat-label">Current Balance</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-value" id="total-rewards">-- RTC</div>
+                <div class="stat-label">Total Rewards</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-value" id="uptime">-- hours</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Reward History</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Reward (RTC)</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="reward-history">
+                    <tr><td colspan="3">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        // Fetch miner data from RustChain API
+        const minerId = new URLSearchParams(window.location.search).get('miner_id');
+        const API_URL = 'https://50.28.86.131';
+        
+        async function fetchMinerData() {
+            try {
+                const response = await fetch(`${API_URL}/wallet/balance?miner_id=${minerId}`);
+                const data = await response.json();
+                document.getElementById('balance').textContent = `${data.balance || 0} RTC`;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        
+        fetchMinerData();
+    </script>
+</body>
+</html>
