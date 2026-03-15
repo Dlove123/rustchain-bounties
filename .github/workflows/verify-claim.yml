@@ -1,0 +1,27 @@
+name: Verify Bounty Claim
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    if: contains(github.event.comment.body, '/verify')
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install PyGithub requests
+      
+      - name: Verify Claim
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python verification_bot.py
