@@ -1,0 +1,17 @@
+# Wallet files (never commit!)
+*.json
+!Cargo.toml
+
+# Build artifacts
+/target/
+**/target/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

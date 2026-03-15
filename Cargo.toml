@@ -1,0 +1,17 @@
+[package]
+name = "rustchain-wallet"
+version = "0.1.0"
+edition = "2021"
+description = "Native Rust wallet CLI for RustChain blockchain"
+license = "MIT"
+authors = ["Dlove123"]
+
+[dependencies]
+clap = { version = "4.4", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+reqwest = { version = "0.11", features = ["blocking", "json"] }
+hex = "0.4"
+sha2 = "0.10"
+dirs = "5.0"
+thiserror = "1.0"
