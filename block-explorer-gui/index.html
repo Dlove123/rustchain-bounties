@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RustChain Block Explorer - Real-Time Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f0f23; color: #fff; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; text-align: center; }
+    .header h1 { font-size: 24px; margin-bottom: 8px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; padding: 20px; }
+    .stat-card { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; text-align: center; }
+    .stat-value { font-size: 32px; font-weight: 700; color: #667eea; }
+    .stat-label { font-size: 14px; opacity: 0.8; margin-top: 8px; }
+    .section { padding: 20px; }
+    .section h2 { font-size: 20px; margin-bottom: 16px; color: #667eea; }
+    table { width: 100%; border-collapse: collapse; background: rgba(255,255,255,0.05); border-radius: 12px; overflow: hidden; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    th { background: rgba(102,126,234,0.3); font-weight: 600; }
+    tr:hover { background: rgba(255,255,255,0.1); }
+    .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+    .badge-online { background: rgba(81,207,102,0.3); color: #51cf66; }
+    .badge-offline { background: rgba(255,107,107,0.3); color: #ff6b6b; }
+    .badge-idle { background: rgba(255,193,7,0.3); color: #ffc107; }
+    .refresh-btn { background: #667eea; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-bottom: 16px; }
+    .refresh-btn:hover { opacity: 0.9; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+    .tab { padding: 10px 20px; background: rgba(255,255,255,0.1); border: none; color: #fff; border-radius: 8px; cursor: pointer; }
+    .tab.active { background: #667eea; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+  </style>
+</head>
+<body>
+  <div class="header"><h1>🦀 RustChain Block Explorer</h1><p>Real-Time Dashboard - Live Miner & Agent Economy Monitoring</p></div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-value" id="total-miners">0</div><div class="stat-label">Total Miners</div></div>
+    <div class="stat-card"><div class="stat-value" id="active-miners">0</div><div class="stat-label">Active (24h)</div></div>
+    <div class="stat-card"><div class="stat-value" id="total-jobs">0</div><div class="stat-label">Agent Jobs</div></div>
+    <div class="stat-card"><div class="stat-value" id="rtc-volume">0</div><div class="stat-label">RTC Volume</div></div>
+  </div>
+  <div class="section">
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('miners')">Miners</button>
+      <button class="tab" onclick="showTab('agents')">Agent Economy</button>
+      <button class="tab" onclick="showTab('wallet')">Wallet Lookup</button>
+    </div>
+    <div id="miners-panel" class="panel active">
+      <button class="refresh-btn" onclick="loadMiners()">🔄 Refresh</button>
+      <table><thead><tr><th>Miner ID</th><th>Architecture</th><th>Status</th><th>Last Attestation</th><th>Antiquity Multiplier</th></tr></thead><tbody id="miners-table"></tbody></table>
+    </div>
+    <div id="agents-panel" class="panel">
+      <button class="refresh-btn" onclick="loadAgents()">🔄 Refresh</button>
+      <table><thead><tr><th>Job ID</th><th>Title</th><th>Reward</th><th>Status</th><th>Agent</th></tr></thead><tbody id="agents-table"></tbody></table>
+    </div>
+    <div id="wallet-panel" class="panel">
+      <div style="margin-bottom:16px;"><input type="text" id="wallet-address" placeholder="Enter RTC wallet address..." style="padding:12px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#fff;width:400px;"><button class="refresh-btn" onclick="lookupWallet()" style="margin-left:8px;">🔍 Lookup</button></div>
+      <div id="wallet-result"></div>
+    </div>
+  </div>
+  <script>
+    const API_BASE = 'https://explorer.rustchain.org/api';
+    function showTab(n) { document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active')); event.target.classList.add('active'); document.getElementById(n+'-panel').classList.add('active'); }
+    async function loadStats() { try { const r = await fetch(API_BASE+'/stats'); const d = await r.json(); document.getElementById('total-miners').textContent = d.totalMiners||0; document.getElementById('active-miners').textContent = d.activeMiners||0; document.getElementById('total-jobs').textContent = d.totalJobs||0; document.getElementById('rtc-volume').textContent = (d.rtcVolume||0).toLocaleString(); } catch(e) {} }
+    async function loadMiners() { try { const r = await fetch(API_BASE+'/miners'); const m = await r.json(); document.getElementById('miners-table').innerHTML = m.map(x=>'<tr><td>'+(x.id||'N/A')+'</td><td><span class="badge badge-online">'+(x.architecture||'Unknown')+'</span></td><td><span class="badge '+(x.status==='online'?'badge-online':'badge-offline')+'">'+(x.status||'offline')+'</span></td><td>'+(x.lastAttestation?new Date(x.lastAttestation).toLocaleString():'Never')+'</td><td>'+(x.antiquityMultiplier||'1.0')+'x</td></tr>').join(''); } catch(e) {} }
+    async function loadAgents() { try { const r = await fetch(API_BASE+'/agent/jobs'); const j = await r.json(); document.getElementById('agents-table').innerHTML = j.map(x=>'<tr><td>#'+(x.id||'N/A')+'</td><td>'+(x.title||'N/A')+'</td><td>'+(x.reward||0)+' RTC</td><td><span class="badge '+(x.status==='open'?'badge-online':'badge-idle')+'">'+x.status+'</span></td><td>'+(x.agent||'Unassigned')+'</td></tr>').join(''); } catch(e) {} }
+    async function lookupWallet() { const a = document.getElementById('wallet-address').value.trim(); if(!a) return; try { const r = await fetch(API_BASE+'/wallet/'+a); const d = await r.json(); document.getElementById('wallet-result').innerHTML = '<div class="stat-card"><div class="stat-label">Balance</div><div class="stat-value">'+(d.balance||0)+' RTC</div><div class="stat-label">Jobs: '+(d.jobsCompleted||0)+' | Rep: '+(d.reputation||'N/A')+'</div></div>'; } catch(e) { document.getElementById('wallet-result').innerHTML = '<p>Error</p>'; } }
+    setInterval(()=>{loadStats();loadMiners();loadAgents();},30000);
+    loadStats(); loadMiners(); loadAgents();
+  </script>
+</body>
+</html>
