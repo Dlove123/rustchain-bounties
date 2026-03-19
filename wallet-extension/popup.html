@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RustChain Wallet</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 360px;
+      min-height: 500px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+    }
+    .header { padding: 20px; text-align: center; background: rgba(0,0,0,0.2); }
+    .header h1 { font-size: 20px; font-weight: 600; }
+    .balance-card {
+      margin: 20px; padding: 20px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px; backdrop-filter: blur(10px);
+    }
+    .balance-label { font-size: 12px; opacity: 0.8; margin-bottom: 8px; }
+    .balance-amount { font-size: 32px; font-weight: 700; }
+    .balance-usd { font-size: 14px; opacity: 0.8; margin-top: 4px; }
+    .actions {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 12px; padding: 0 20px; margin-bottom: 20px;
+    }
+    .action-btn {
+      padding: 12px; background: rgba(255,255,255,0.2);
+      border: none; border-radius: 8px; color: #fff;
+      cursor: pointer; font-size: 12px; transition: background 0.2s;
+    }
+    .action-btn:hover { background: rgba(255,255,255,0.3); }
+    .content { padding: 0 20px 20px; }
+    .panel {
+      display: none; background: rgba(255,255,255,0.1);
+      border-radius: 12px; padding: 20px;
+    }
+    .panel.active { display: block; }
+    .input-group { margin-bottom: 16px; }
+    .input-group label { display: block; font-size: 12px; margin-bottom: 8px; opacity: 0.8; }
+    .input-group input, .input-group textarea {
+      width: 100%; padding: 12px;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 8px; color: #fff; font-size: 14px;
+    }
+    .btn {
+      width: 100%; padding: 12px; background: #fff;
+      color: #667eea; border: none; border-radius: 8px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    .btn:hover { opacity: 0.9; }
+    .wallet-address {
+      font-family: monospace; font-size: 12px;
+      background: rgba(0,0,0,0.2); padding: 8px;
+      border-radius: 4px; word-break: break-all; margin-bottom: 16px;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="header"><h1>🦀 RustChain Wallet</h1></div>
+  
+  <div id="welcome-screen" class="content">
+    <div class="panel active">
+      <h2 style="margin-bottom: 16px;">Welcome to RustChain Wallet</h2>
+      <p style="margin-bottom: 20px; opacity: 0.8;">Create a new wallet or import an existing one.</p>
+      <button class="btn" onclick="showCreateWallet()" style="margin-bottom: 12px;">✨ Create New Wallet</button>
+      <button class="btn" onclick="showImportWallet()" style="background: rgba(255,255,255,0.2); color: #fff;">📥 Import Existing Wallet</button>
+    </div>
+  </div>
+  
+  <div id="create-screen" class="content hidden">
+    <div class="panel active">
+      <h2 style="margin-bottom: 16px;">Create New Wallet</h2>
+      <div class="warning" style="background: rgba(255,193,7,0.2); border: 1px solid rgba(255,193,7,0.5); padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 12px;">
+        ⚠️ <strong>Important:</strong> Write down your seed phrase and store it securely!
+      </div>
+      <div id="seed-phrase-display" class="seed-phrase hidden" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px;"></div>
+      <button class="btn" onclick="generateWallet()" id="generate-btn" style="margin-bottom: 12px;">🔑 Generate Seed Phrase</button>
+      <div id="confirm-section" class="hidden">
+        <div class="input-group" style="margin-top: 16px;">
+          <label><input type="checkbox" id="confirm-backup" onchange="toggleCreateButton()"> I have written down my seed phrase</label>
+        </div>
+        <button class="btn" onclick="createWallet()" id="create-btn" disabled>✅ Create Wallet</button>
+      </div>
+      <button class="btn" onclick="showWelcome()" style="margin-top: 12px; background: rgba(255,255,255,0.2); color: #fff;">← Back</button>
+    </div>
+  </div>
+  
+  <div id="import-screen" class="content hidden">
+    <div class="panel active">
+      <h2 style="margin-bottom: 16px;">Import Wallet</h2>
+      <div class="input-group">
+        <label>Seed Phrase (12 or 24 words)</label>
+        <textarea id="import-seed" rows="4" placeholder="word1 word2 word3 ..."></textarea>
+      </div>
+      <button class="btn" onclick="importWallet()">📥 Import Wallet</button>
+      <button class="btn" onclick="showWelcome()" style="margin-top: 12px; background: rgba(255,255,255,0.2); color: #fff;">← Back</button>
+    </div>
+  </div>
+  
+  <div id="wallet-screen" class="hidden">
+    <div class="balance-card">
+      <div class="balance-label">Total Balance</div>
+      <div class="balance-amount"><span id="balance">0.00</span> RTC</div>
+      <div class="balance-usd">≈ $<span id="balance-usd">0.00</span> USD</div>
+    </div>
+    <div class="actions">
+      <button class="action-btn" onclick="showSend()">⬆️ Send</button>
+      <button class="action-btn" onclick="showReceive()">⬇️ Receive</button>
+      <button class="action-btn" onclick="refreshBalance()">🔄 Refresh</button>
+    </div>
+    <div class="content">
+      <div class="input-group">
+        <label>Wallet Address</label>
+        <div class="wallet-address" id="wallet-address">Loading...</div>
+        <button class="btn" onclick="copyAddress()" style="padding: 8px; font-size: 12px;">📋 Copy Address</button>
+      </div>
+      <button class="btn" onclick="logout()" style="background: rgba(255,107,107,0.3); color: #fff;">🚪 Lock Wallet</button>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
