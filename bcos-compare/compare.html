@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCOS v2 vs Altermenta Nucleus Verify - Comparison</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #16a34a;
+            --warning: #d97706;
+            --bg: #f8fafc;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: system-ui, sans-serif; background: var(--bg); padding: 2rem; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 2rem; color: #1e293b; }
+        .comparison-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .comparison-table th, .comparison-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        .comparison-table th { background: var(--primary); color: white; }
+        .comparison-table tr:hover { background: #f1f5f9; }
+        .feature { font-weight: 600; }
+        .bcos { color: var(--success); }
+        .nucleus { color: var(--warning); }
+        .trust-calc { background: white; padding: 2rem; border-radius: 8px; margin-top: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .trust-calc h2 { margin-bottom: 1rem; }
+        .trust-score { font-size: 3rem; font-weight: bold; color: var(--primary); }
+        .slider { width: 100%; margin: 1rem 0; }
+        @media (max-width: 768px) { .comparison-table { font-size: 0.875rem; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BCOS v2 vs Altermenta Nucleus Verify</h1>
+        
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>BCOS v2</th>
+                    <th>Nucleus Verify</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="feature">Price</td>
+                    <td class="bcos">Free (MIT)</td>
+                    <td class="nucleus">$20-50/mo</td>
+                </tr>
+                <tr>
+                    <td class="feature">Source</td>
+                    <td class="bcos">Open source</td>
+                    <td class="nucleus">Proprietary</td>
+                </tr>
+                <tr>
+                    <td class="feature">On-chain proof</td>
+                    <td class="bcos">RustChain BLAKE2b</td>
+                    <td class="nucleus">None</td>
+                </tr>
+                <tr>
+                    <td class="feature">Offline scanning</td>
+                    <td class="bcos">Full local engine</td>
+                    <td class="nucleus">Cloud API only</td>
+                </tr>
+                <tr>
+                    <td class="feature">Human review</td>
+                    <td class="bcos">L2 Ed25519 sigs</td>
+                    <td class="nucleus">Fully automated</td>
+                </tr>
+                <tr>
+                    <td class="feature">Trust score</td>
+                    <td class="bcos">Transparent formula</td>
+                    <td class="nucleus">Opaque</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="trust-calc">
+            <h2>Trust Score Calculator</h2>
+            <label>Open Source: <input type="range" class="slider" min="0" max="10" value="10"></label>
+            <label>On-chain Proof: <input type="range" class="slider" min="0" max="10" value="10"></label>
+            <label>Offline Scanning: <input type="range" class="slider" min="0" max="10" value="10"></label>
+            <label>Human Review: <input type="range" class="slider" min="0" max="10" value="10"></label>
+            <div class="trust-score">Score: 100/100</div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.slider').forEach(slider => {
+            slider.addEventListener('input', updateScore);
+        });
+        function updateScore() {
+            const sliders = document.querySelectorAll('.slider');
+            let total = 0;
+            sliders.forEach(s => total += parseInt(s.value));
+            const score = Math.round((total / (sliders.length * 10)) * 100);
+            document.querySelector('.trust-score').textContent = `Score: ${score}/100`;
+        }
+    </script>
+</body>
+</html>
