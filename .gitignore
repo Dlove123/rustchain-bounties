@@ -1,17 +1,5 @@
-# Wallet files (never commit!)
-*.json
-!Cargo.toml
+__pycache__/
+*.pyc
 
-# Build artifacts
-/target/
-**/target/
-
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
+# Generated scan artifacts
+reports/
